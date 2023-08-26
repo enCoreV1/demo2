@@ -3,7 +3,7 @@ const { ERROR_CODE_VALIDATION, ERROR_CODE_CAST, ERROR_CODE_SERVER } = require('.
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send(users)) // по тестам должен быть 200
+    .then((users) => res.status(200).send(users))
     .catch(() => res.status(ERROR_CODE_SERVER).send({ message: 'На сервере произошла ошибка' }));
 };
 
@@ -28,7 +28,7 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   return User.create({ name, about, avatar })
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(ERROR_CODE_VALIDATION).send({ message: 'Переданы некорректные данные при создании пользователя' });
