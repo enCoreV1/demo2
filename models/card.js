@@ -4,13 +4,17 @@ const mongoose = require('mongoose');
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
+    required: [true, 'Поле с названием не может быть пустым'],
+    minlength: [2, 'Минимальная длина поля с названием не может быть короче двух символов'],
+    maxlength: [30, 'Максимальная длина поля с названием не может быть длиннее 30 символов'],
   },
   link: {
     type: String,
-    required: true,
+    validate: {
+      validator: (v) => /https?:/.test(v),
+      message: 'Некорректный URL',
+    },
+    required: [true, 'Ссылка на фото обязательна'],
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

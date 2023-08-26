@@ -3,7 +3,7 @@ const { ERROR_CODE_VALIDATION, ERROR_CODE_CAST, ERROR_CODE_SERVER } = require('.
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.status(201).send(users))
     .catch(() => res.status(ERROR_CODE_SERVER).send({ message: 'На сервере произошла ошибка' }));
 };
 
