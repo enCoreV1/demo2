@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {
   getUsers,
-  // findUser,
+  findUser,
   getCurrentUser,
   updateUserProfile,
   updateUserAvatar,
@@ -17,7 +17,7 @@ const {
 router.get('/', getUsers);
 
 // возвращает пользователя по _id
-// router.get('/:userId', validationUserId, findUser);
+router.get('/:userId', /* validationUserId, */ findUser);
 
 // возвращает текущего пользователя
 router.get('/me', getCurrentUser);
