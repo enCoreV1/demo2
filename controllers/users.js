@@ -52,10 +52,8 @@ const createUser = (req, res, next) => { // eslint-disable-next-line object-curl
             }
         });
     }).catch((err) => {
-        if (err.name === 'MongoError' && err.code === 11000) {
-            next(new ErrorCodeConflict('Пользователь с таким email уже существует'));
-        } else {
-            next(err);
+        if (err.code === 11000) {
+            next(new ErrorCodeConflict('Пользователь уже существует'));
         }
     });
 };
@@ -96,7 +94,13 @@ const updateUserAvatar = (req, res, next) => {
 };
 
 const getCurrentUser = (req, res, next) => {
-    User.findById(req.user._id).orFail(new ErrorCodeNotFound('Пользователь по указанному _id не найден')).then((user) => res.send(user)).catch(next);
+    const {_id} = req.user;
+    User.find({_id}).then((user) => {
+        if (!user) {
+            next(new NotFoundError('Пользователь не найден'));
+        }
+        return res.send(...user);
+    }).catch(next);
 };
 
 // дзынь-дзынь
