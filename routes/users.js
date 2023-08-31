@@ -1,3 +1,4 @@
+const { celebrate, Joi } = require('celebrate');
 const router = require('express').Router();
 const {
   getUsers,
@@ -17,7 +18,15 @@ const {
 router.get('/', getUsers);
 
 // возвращает пользователя по _id
-router.get('/:userId', /* validationUserId, */ findUser);
+router.get(
+  '/:userId',
+  celebrate({
+    params: Joi.object().keys({
+      userId: Joi.string().length(24).hex().required(),
+    }),
+  }),
+  findUser,
+);
 
 // возвращает текущего пользователя
 router.get('/me', getCurrentUser);

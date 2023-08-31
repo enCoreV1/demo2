@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -54,32 +54,37 @@ const createUser = (req, res, next) => {
         },
       });
     })
-    //     .catch((e) => {
-    //       if (e.code === 11000) {
-    //         next(new ErrorCodeConflict('Email is already'));
-    //       } else if (e instanceof mongoose.Error.ValidationError) {
-    //         const message = Object.values(e.errors)
-    //           .map((error) => error.message)
-    //           .join('; ');
-    //         next(new ErrorCodeBadRequest(message));
-    //       } else {
-    //         next(e);
-    //       }
-    //     });
-    // };
     .catch((err) => {
-      // if (err.name === 'ValidationError') {
-      //   throw new ErrorCodeBadRequest('Переданы некорректные данные при создании пользователя');
-      // } else
       if (err.code === 11000) {
-        next(new ErrorCodeConflict('Пользователь с таким email уже существует'));
-      } else if (err instanceof mongoose.Error.ValidationError) {
-        const message = Object.values(err.errors).map((error) => error.message).join('; ');
-        next(new ErrorCodeBadRequest(message));
-      } else {
-        next(err);
+        next(new ErrorCodeConflict('Пользователь уже существует'));
       }
     });
+  //     .catch((e) => {
+  //       if (e.code === 11000) {
+  //         next(new ErrorCodeConflict('Email is already'));
+  //       } else if (e instanceof mongoose.Error.ValidationError) {
+  //         const message = Object.values(e.errors)
+  //           .map((error) => error.message)
+  //           .join('; ');
+  //         next(new ErrorCodeBadRequest(message));
+  //       } else {
+  //         next(e);
+  //       }
+  //     });
+  // };
+  // .catch((err) => {
+  //   // if (err.name === 'ValidationError') {
+  //   //   throw new ErrorCodeBadRequest('Переданы некорректные данные при создании пользователя');
+  //   // } else
+  //   if (err.code === 11000) {
+  //     next(new ErrorCodeConflict('Пользователь с таким email уже существует'));
+  //   } else if (err instanceof mongoose.Error.ValidationError) {
+  //     const message = Object.values(err.errors).map((error) => error.message).join('; ');
+  //     next(new ErrorCodeBadRequest(message));
+  //   } else {
+  //     next(err);
+  //   }
+  // });
 };
 
 const updateUserProfile = (req, res, next) => {
