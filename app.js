@@ -2,6 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const { errors } = require('celebrate');
+const { createUser, login } = require('./controllers/users');
+const {
+  validationCreateUser,
+  validationLogin,
+} = require('./middlewares/validation');
+const auth = require('./middlewares/auth');
+const handleError = require('./middlewares/handleError');
 
 const routes = require('./routes');
 
@@ -22,14 +30,14 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   // useFindAndModify: false,  // не работают в этой версии
 });
 
-// добавляем в каждый запрос объект user
-app.use((req, res, next) => {
-  req.user = { _id: '64e9e7c253a660dd4737ff82' };
-  next();
-});
+app.post('/signin', validationLogin, login);
+app.post('/signup', validationCreateUser, createUser);
 
 // роуты
+app.use(auth);
 app.use(routes);
+app.use(errors());
+app.use(handleError);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

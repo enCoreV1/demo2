@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const isUrl = require('validator/lib/isURL');
 
 // описание схемы карточки
 const cardSchema = new mongoose.Schema({
@@ -10,9 +11,13 @@ const cardSchema = new mongoose.Schema({
   },
   link: {
     type: String,
+    // validate: {
+    //   validator: (v) => /https?:/.test(v),
+    //   message: 'Некорректный URL',
+    // },
     validate: {
-      validator: (v) => /https?:/.test(v),
-      message: 'Некорректный URL',
+      validator: (url) => isUrl(url),
+      message: 'Некорректный адрес URL',
     },
     required: [true, 'Ссылка на фото обязательна'],
   },
@@ -30,8 +35,6 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-}, {
-  versionKey: '',
 });
 
 // создаём модель и экспортируем её
