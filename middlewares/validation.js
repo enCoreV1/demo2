@@ -40,11 +40,11 @@ const validationUpdateAvatar = celebrate({
   }),
 });
 
-const validationUserId = celebrate({
+/* const validationUserId = celebrate({
   params: Joi.object().keys({
     userId: Joi.string().required().hex().length(24),
   }),
-});
+}); */
 
 const validationCreateCard = celebrate({
   body: Joi.object().keys({
@@ -64,7 +64,7 @@ module.exports = {
   validationCreateUser,
   validationUpdateUser,
   validationUpdateAvatar,
-  validationUserId,
+  // validationUserId,
   validationCreateCard,
   validationCardId,
 };

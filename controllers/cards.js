@@ -50,13 +50,20 @@ const likeCard = (req, res, next) => {
   })
     .then((card) => res.status(200).send(card))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new ErrorCodeBadRequest('Переданы некорректные данные для постановки лайка');
-      } else if (err.message === 'NotFound') {
-        throw new ErrorCodeNotFound('Передан несуществующий _id карточки');
+      // if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
+      //   throw new ErrorCodeBadRequest('Переданы некорректные данные для постановки лайка');
+      // } else if (err.message === 'NotFound') {
+      //   throw new ErrorCodeNotFound('Передан несуществующий _id карточки');
+        next(new ErrorCodeBadRequest('Переданы некорректные данные для постановки лайка'));
       }
-    })
-    .catch(next);
+      // })
+      // .catch(next);
+      if (err.message === 'NotFound') {
+        next(new ErrorCodeNotFound('Передан несуществующий _id карточки'));
+      }
+      next(err);
+    });
 };
 
 const dislikeCard = (req, res, next) => {
@@ -69,13 +76,20 @@ const dislikeCard = (req, res, next) => {
   })
     .then((card) => res.status(200).send(card))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new ErrorCodeBadRequest('Переданы некорректные данные для снятия лайка');
-      } else if (err.message === 'NotFound') {
-        throw new ErrorCodeNotFound('Передан несуществующий _id карточки');
+      // if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
+      //   throw new ErrorCodeBadRequest('Переданы некорректные данные для снятия лайка');
+      // } else if (err.message === 'NotFound') {
+      //   throw new ErrorCodeNotFound('Передан несуществующий _id карточки');
+        next(new ErrorCodeBadRequest('Переданы некорректные данные для снятия лайка'));
       }
-    })
-    .catch(next);
+      // })
+      // .catch(next);
+      if (err.message === 'NotFound') {
+        next(new ErrorCodeNotFound('Передан несуществующий _id карточки'));
+      }
+      next(err);
+    });
 };
 
 module.exports = {

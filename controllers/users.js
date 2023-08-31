@@ -21,12 +21,18 @@ const findUser = (req, res, next) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ErrorCodeBadRequest('Переданы некорректные данные');
-      } else if (err.message === 'NotFound') {
-        throw new ErrorCodeNotFound('Пользователь по указанному _id не найден');
+      //   throw new ErrorCodeBadRequest('Переданы некорректные данные');
+      // } else if (err.message === 'NotFound') {
+      //   throw new ErrorCodeNotFound('Пользователь по указанному _id не найден');
+        next(new ErrorCodeBadRequest('Переданы некорректные данные'));
       }
-    })
-    .catch(next);
+      // })
+      // .catch(next);
+      if (err.message === 'NotFound') {
+        next(new ErrorCodeNotFound('Пользователь по указанному _id не найден'));
+      }
+      next(err);
+    });
 };
 
 const createUser = (req, res, next) => {
@@ -39,7 +45,10 @@ const createUser = (req, res, next) => {
         name, about, avatar, email, password: hash,
       });
     })
-    .then((user) => res.status(201).send(user))
+    // .then((user) => res.status(201).send(user))
+    .then(() => res.status(201).send({
+      name, about, avatar, email,
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new ErrorCodeBadRequest('Переданы некорректные данные при создании пользователя');
@@ -93,7 +102,8 @@ const getCurrentUser = (req, res, next) => {
     .orFail(() => {
       throw new ErrorCodeNotFound('Пользователь не найден');
     })
-    .then((user) => res.status(200).send({ user }))
+    // .then((user) => res.status(200).send({ user }))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new ErrorCodeBadRequest('Переданы некорректные данные');
